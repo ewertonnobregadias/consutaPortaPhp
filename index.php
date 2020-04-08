@@ -21,7 +21,8 @@
   
  	<div class="container-fluid mt-5"> 
   <div class="jumbotron">
-  <h1 class="display-4">Consulta de portas</h1>
+  <h1 class="display-4">Consulta de porta</h1>
+  <small> Se a porta estiver fechada no servidor onde este script esta rodando, aparecerá como fechada... </small>
   <p class="lead"></p>
 </div>
 
