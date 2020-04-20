@@ -8,6 +8,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
+	<!-- google recaptcha -->
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	
 	<!-- fontawesome -->
 	<script src="https://kit.fontawesome.com/0409d33244.js"></script>
 		
@@ -28,28 +31,47 @@
 
 
 <?php
+session_start();
+
 if(isset($_POST['ip']) AND isset($_POST['porta']) ){
-	if(stest($_POST['ip'], $_POST['porta'])){
-	echo "
-	<div class='alert alert-success' role='alert'>
-	A Porta ".$_POST['porta']." está <b style='color: green;'>aberta</b> em ".$_POST['ip']."
-	</div>
-	<br>
-	<br>
-	<a href='javascript:history.back()' class='btn btn-primary'>Nova Consulta</a>";
-	}
-	else{
-		echo 
-		"
-		<div class='alert alert-danger' role='alert'>
-		A Porta ".$_POST['porta']." está <b style='color: red;'>fechada</b> em ".$_POST['ip']."
+	
+	if($_POST['codValidador'] ==  $_SESSION["codVal"])
+	{	
+		if(stest($_POST['ip'], $_POST['porta'])){
+		echo "
+		<div class='alert alert-success' role='alert'>
+		A Porta ".$_POST['porta']." está <b style='color: green;'>aberta</b> em ".$_POST['ip']."
 		</div>
 		<br>
 		<br>
 		<a href='javascript:history.back()' class='btn btn-primary'>Nova Consulta</a>";
+		}
+		else{
+			echo 
+			"
+			<div class='alert alert-danger' role='alert'>
+			A Porta ".$_POST['porta']." está <b style='color: red;'>fechada</b> em ".$_POST['ip']."
+			</div>
+			<br>
+			<br>
+			<a href='javascript:history.back()' class='btn btn-primary'>Nova Consulta</a>";
+		}
+	}
+	else{
+		echo 
+			"
+			<div class='alert alert-danger' role='alert'>
+			É NECESSÁRIO PREENCHER O CÓDIGO VALIDADOR...
+			</div>
+			<br>
+			<br>
+			<a href='javascript:history.back()' class='btn btn-primary'>Nova Consulta</a>";
 	}
 
 }else{
+
+	$_SESSION["codVal"] = rand(1000, 9999);
+
 	echo "
 	
 		<form action='index.php' method='POST'>
@@ -58,6 +80,10 @@ if(isset($_POST['ip']) AND isset($_POST['porta']) ){
 
 			<label for='porta' class='ml-3' >PORTA:</label>
 			<input type='text' id='porta' name='porta'>
+			
+			<label for='codValidador' class='ml-3' >Digite <b>".$_SESSION["codVal"]."</b>:</label>
+			<input type='text' id='codValidador' name='codValidador'>
+
 
 			<input class='ml-1' type='submit' value='consultar'  />
 		</form> 
